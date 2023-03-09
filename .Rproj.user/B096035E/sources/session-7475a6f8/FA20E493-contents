@@ -1,0 +1,26 @@
+baseurl: https://samirfidai.com/
+title: Samir's Website
+theme: hugo-theme-nix
+languageCode: en-us
+disqusShortname: your_disqus_shortname
+menu:
+  header:
+    - name: post
+      url: post
+      weight: 0
+    - name: about
+      url: about
+      weight: 1
+params:
+  About: Thanks for coming on!
+  Email: samirSfidai@gmail.com
+  Favicon: /favicon.ico
+  GithubID: FidaiGuy
+  TwitchID: soyfidadddy
+  HeaderHostname: 
+  HeaderUsername: samir
+  LinkedInID: samirSfidai
+  Name: Samir Fidai
+  ProfilePicture: /headshot.jpg
+  TwitterID: fidaithegod
+  InstagramID: fidai_guy

@@ -1,5 +1,5 @@
-baseurl: http://samirfidai.com/
-title: Hugo Website
+baseurl: https://samirfidai.com/
+title: Samir's Website
 theme: hugo-theme-nix
 languageCode: en-us
 disqusShortname: your_disqus_shortname

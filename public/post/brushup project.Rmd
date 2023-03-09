@@ -1,0 +1,55 @@
+---
+title: "Brush Up Project"
+output: html_document
+date: "2023-02-03"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+horror_movies <- read_csv("C:/Users/samir/Documents/DATA/horror_movies.csv")
+languages <- read.csv("C:/Users/samir/Documents/DATA/list_of_iso_codes-934j.csv")
+languages <- languages %>%
+  select(Language.name, X639.1) %>%
+  rename(original_language = X639.1)
+horror_movies %>% glimpse()
+```
+
+
+
+```{r pressure, fig.width = 20}
+horror_movies_runtime <- horror_movies %>%
+  mutate(original_language = str_replace_all(original_language, 'cn', 'zh')) %>%
+  filter(runtime != is.na(runtime)) %>%
+  select(original_language, runtime) %>%
+  group_by(original_language)%>% 
+  summarise(median_runtime = median(runtime), number_movies = n()) %>%
+  arrange(desc(number_movies)) %>%
+  head(n=25)
+
+horror_movies_runtime %>%
+  left_join(languages, by = 'original_language') %>%
+  ggplot(aes(Language.name, median_runtime))+
+          geom_col() +
+          geom_text(aes(label = median_runtime, vjust = -0.5)) +
+          xlab('Language') +
+          ylab('Median Minutes of Movie')
+
+
+
+```
+
+```{r}
+horror_movies %>%
+  group_by(collection_name)
+
+```
+

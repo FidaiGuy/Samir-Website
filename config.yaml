@@ -1,6 +1,6 @@
 baseurl: https://samirfidai.com/
 title: Samir's Website
-theme: hugo-theme-nix
+themea: hugo-theme-nix
 languageCode: en-us
 disqusShortname: your_disqus_shortname
 menu:

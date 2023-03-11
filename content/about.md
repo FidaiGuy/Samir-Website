@@ -1,30 +1,19 @@
 ---
-date: "2014-04-09"
+date: "2023-03-10"
 menu: main
-title: About Hugo
+title: About Me
 ---
 
-Hugo is a static site engine written in Go.
+Thanks again for stopping by! My name's Samir and I'm currently living in New Jersey. 
+
+Just to heads up, this website IS and CONTINUE will be to be a Work in Progress. As of now I have temporarily removed all blog posts from the website. 
 
 
-It makes use of a variety of open source projects including:
 
-* [Cobra](https://github.com/spf13/cobra)
-* [Viper](https://github.com/spf13/viper)
-* [J Walter Weatherman](https://github.com/spf13/jWalterWeatherman)
-* [Cast](https://github.com/spf13/cast)
 
-Learn more and contribute on [GitHub](https://github.com/spf13).
+## About Me
+* I graduated from Rutgers University in 2021, and I am a huge fan of Rutgers Football and Rutgers Basketball. Go Knights!
 
-## Setup
 
-Some fun facts about [Hugo](http://gohugo.io/):
 
-* Built in [Go](http://golang.org/)
-* Loosely inspired by [Jekyll](http://jekyllrb.com/)
-* Primarily developed by [spf13](http://spf13.com/) on the train while commuting to and from Manhattan.
-* Coded in [Vim](http://vim.org) using [spf13-vim](http://vim.spf13.com/)
 
-Have questions or suggestions? Feel free to [open an issue on GitHub](https://github.com/spf13/hugo/issues/new) or [ask me on Twitter](https://twitter.com/spf13).
-
-Thanks for reading!

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Samir&#39;s Website</title>
+    <link>https://samirfidai.com/tags/r/</link>
+    <description>Recent content in R on Samir&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://samirfidai.com/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Stat 492 (Data Management and Data Wrangling Final Project)</title>
+      <link>https://samirfidai.com/post/2023-03-11-test-blog/</link>
+      <pubDate>Sun, 02 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/post/2023-03-11-test-blog/</guid>
+      <description>The following project below was Part One of my Submission for My Data Wrangling and Data Management Class during my Final Semester at Rutgers University. The following packages were used in the creation of Part One: tidyverse, rvest, httr, jsonlite, leaflet, and broom.
+For the first stage of the final project, I aim to make an interactive map in R using brewery coordinates from the Open Brewery API.
+In this chunk, I connected to the API, limited my search to just microbreweries, and filtered out all values that did not have a latitude and a longitude.</description>
+    </item>
+    
+  </channel>
+</rss>

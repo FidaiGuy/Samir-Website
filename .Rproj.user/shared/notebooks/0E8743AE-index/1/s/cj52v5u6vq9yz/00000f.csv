@@ -1,0 +1,8 @@
+"0","breweries_data <- as.data.frame(do.call(rbind, breweries_list))"
+"0",""
+"0","breweries_data <- breweries_data %>%"
+"0","  mutate(latitude = as.numeric(latitude),"
+"0","         longitude = as.numeric(longitude))"
+"0",""
+"0","breweries_data_30 <- breweries_data %>% head(n=30) %>%"
+"0","  select(name, latitude, longitude)"

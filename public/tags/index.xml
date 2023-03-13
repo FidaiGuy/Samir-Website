@@ -5,6 +5,25 @@
     <link>https://samirfidai.com/tags/</link>
     <description>Recent content in Tags on Samir&#39;s Website</description>
     <generator>Hugo -- gohugo.io</generator>
-    <language>en-us</language><atom:link href="https://samirfidai.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <lastBuildDate>Sun, 02 May 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://samirfidai.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>R</title>
+      <link>https://samirfidai.com/tags/r/</link>
+      <pubDate>Sun, 02 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/tags/r/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>TidyVerse</title>
+      <link>https://samirfidai.com/tags/tidyverse/</link>
+      <pubDate>Sun, 02 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/tags/tidyverse/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

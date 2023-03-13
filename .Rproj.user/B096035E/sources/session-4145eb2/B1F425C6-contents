@@ -1,0 +1,110 @@
+---
+title: Twitter WordCloud
+author: 'Samir Fidai'
+date: '2021-07-12'
+slug: []
+categories: []
+tags: []
+---
+
+This was a project that I undertook after Graduation in 2021. I downloaded my Twitter Data, extracted the tweets, and cut out the individual words. I then visualized the most commonly tweeted words using wordcloud2. The data below includes tweets all the way up to Mid-2021. I do plan on adding in an update for 2023. 
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(jsonlite)
+library(rtweet)
+library(tidytext)
+```
+
+
+
+In the chunk below, the tweets.js file is read into R 
+
+```{r}
+raw_Tweets <- read_file(file = here::here("tweet.js"))
+
+json <- sub("window.YTD.tweet.part0 = ", "", raw_Tweets)
+
+raw_Tweets <- fromJSON(json)
+
+raw_Tweets <- raw_Tweets$tweet
+```
+
+
+Using several commands from the stringr package in the Tidyverse, the tweet column (full_text) is cleaned of my retweets, tweets that start off or include a t.co link (Which maybe a tweet I'm quotetweeting
+or a media file), or other handles.
+
+```{r}
+clean_Tweets <- raw_Tweets %>%
+  filter(retweeted == FALSE) %>%
+  filter(!str_detect(full_text, "^RT "),
+         !str_detect(full_text, "^https")) %>%
+  mutate(retweet_count = as.integer(retweet_count),
+         full_text = str_replace_all(full_text, "https://t.co/[a-zA-Z0-9]*", ""),
+         full_text = str_replace_all(full_text, "@[a-zA-Z0-9_]*", ""))
+```
+
+
+
+Out of curiosity, the Top 5 most retweeted tweets on the profile. 
+```{r}
+clean_Tweets %>%
+  select(retweet_count, full_text) %>%
+  arrange(desc(retweet_count)) %>%
+  head(n = 5)
+```
+
+
+
+
+
+Also out of curiosity, the platforms I used most to send out tweets. I sure love using my phone!
+
+```{r}
+clean_Tweets %>%
+  mutate(`tweet source` = str_extract(source, "Twitter [A-Za-z ]*")) %>%
+  filter(!is.na(`tweet source`))  %>%
+  ggplot() +
+  geom_bar(aes(`tweet source`))
+```
+
+
+In the chunk below I counted each individual word and ordered it by number of occurences descending. The first Ten rows have been printed below. 
+
+```{r}
+tweets <- clean_Tweets %>%
+  select(full_text) %>%
+  unnest_tokens(words, full_text)
+
+
+
+tweets <- tweets %>%
+  mutate(words = str_replace_all(words, "’", "'")) %>%
+  anti_join(stop_words, by = c("words" = "word")) %>%
+  filter(!str_detect(words, "^[0-9]+")) %>%
+  count(words) %>%
+  arrange(desc(n))
+
+tweets %>% head(n=10)
+```
+
+```{r include=FALSE, echo=FALSE}
+library(wordcloud)
+library(wordcloud2)
+
+twitter_wordcloud <- wordcloud(words = tweets$words,
+                               freq = tweets$n,
+                               min.freq = 5,
+                               random.color = TRUE)
+```
+
+
+
+Finally, we include the final wordcloud generated using the wordcloud2 package
+
+```{r}
+twitter_wordcloud2 <- wordcloud2(data = tweets)
+
+twitter_wordcloud2
+```

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Posts on Samir&#39;s Website</title>
+    <link>https://samirfidai.com/post/</link>
+    <description>Recent content in Posts on Samir&#39;s Website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 12 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="https://samirfidai.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Twitter WordCloud</title>
+      <link>https://samirfidai.com/post/2023-03-12-twitter-wordcloud/</link>
+      <pubDate>Mon, 12 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/post/2023-03-12-twitter-wordcloud/</guid>
+      <description>This was a project that I undertook after Graduation in 2021. I downloaded my Twitter Data, extracted the tweets, and cut out the individual words. I then visualized the most commonly tweeted words using wordcloud2. The data below includes tweets all the way up to Mid-2021. I do plan on adding in an update for 2023.
+In the chunk below, the tweets.js file is read into R
+raw_Tweets &amp;lt;- read_file(file = here::here(&amp;#34;tweet.</description>
+    </item>
+    
+    <item>
+      <title>Stat 492 (Data Management and Data Wrangling Final Project)</title>
+      <link>https://samirfidai.com/post/2023-03-11-test-blog/</link>
+      <pubDate>Sun, 02 May 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/post/2023-03-11-test-blog/</guid>
+      <description>The following project below was Part One of my Submission for My Data Wrangling and Data Management Class during my Final Semester at Rutgers University. The following packages were used in the creation of Part One: tidyverse, rvest, httr, jsonlite, leaflet, and broom.
+For the first stage of the final project, I aim to make an interactive map in R using brewery coordinates from the Open Brewery API.
+In this chunk, I connected to the API, limited my search to just microbreweries, and filtered out all values that did not have a latitude and a longitude.</description>
+    </item>
+    
+  </channel>
+</rss>

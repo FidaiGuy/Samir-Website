@@ -1,0 +1,7 @@
+"0","clean_Tweets <- raw_Tweets %>%"
+"0","  filter(retweeted == FALSE) %>%"
+"0","  filter(!str_detect(full_text, ""^RT ""),"
+"0","         !str_detect(full_text, ""^https"")) %>%"
+"0","  mutate(retweet_count = as.integer(retweet_count),"
+"0","         full_text = str_replace_all(full_text, ""https://t.co/[a-zA-Z0-9]*"", """"),"
+"0","         full_text = str_replace_all(full_text, ""@[a-zA-Z0-9_]*"", """"))"

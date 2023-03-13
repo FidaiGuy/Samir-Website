@@ -3,6 +3,10 @@ title: Samir's Website
 themea: hugo-theme-nix
 languageCode: en-us
 disqusShortname: your_disqus_shortname
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
 menu:
   header:
     - name: post

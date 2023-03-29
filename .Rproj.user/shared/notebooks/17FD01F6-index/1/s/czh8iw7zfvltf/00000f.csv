@@ -1,8 +1,0 @@
-"2","Loading required package: RColorBrewer
-"
-"0","library(wordcloud2)"
-"0",""
-"0","twitter_wordcloud <- wordcloud(words = tweets$words,"
-"0","                               freq = tweets$n,"
-"0","                               min.freq = 5,"
-"0","                               random.color = TRUE)"

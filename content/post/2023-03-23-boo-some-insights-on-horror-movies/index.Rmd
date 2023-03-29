@@ -1,0 +1,268 @@
+---
+title: Boo! Some insights on Horror Movies
+author: 'Samir Fidai'
+date: '2023-03-23'
+slug: []
+categories: []
+tags: []
+---
+
+```{r, include = FALSE}
+library(tidyverse)
+
+horror_movies <- read_csv("C:/Users/samir/Documents/GitHub/Horror-Movie-Data-Wrangling-Visualization/horror_movies.csv")
+languages <- read.csv("C:/Users/samir/Documents/GitHub/Horror-Movie-Data-Wrangling-Visualization/list_of_iso_codes-934j.csv")
+languages <- languages %>%
+  select(Language.name, X639.1) %>%
+  rename(original_language = X639.1)
+```
+
+Alongside applying for jobs and also taking courses on Python and SQL, I've been practicing some Data Wrangling and Data Visualization Skills using dplyr and ggplot2. The Data set I've used was Downloaded as a .csv File from [Kaggle](https://www.kaggle.com/datasets/evangower/horror-movies). The dataset contains 21 different variables, however not all 21 were used. The Horror Movies Dataset contains 21 columns and contains about 32,540 movies. However, after filtering for only English movies and already released movies, about 21,000 movies remain. The file I used to wrangle the data is available on my [GitHub](https://www.https://github.com/FidaiGuy/Horror-Movie-Data-Wrangling-Visualization).
+
+```{r language vs minutes, fig.width = 20, echo=FALSE}
+#Wrangling for Average Run Time vs Popularity
+horror_movies_runtime <- horror_movies %>%
+  mutate(original_language = str_replace_all(original_language, 'cn', 'zh')) %>%
+  filter(runtime != is.na(runtime)) %>%
+  select(original_language, runtime) %>%
+  group_by(original_language)%>% 
+  summarise(median_runtime = median(runtime),
+            mean_runtime = mean(runtime),
+            number_movies = n()) %>%
+  arrange(desc(number_movies)) %>%
+  head(n=25)
+
+
+horror_movies_runtime %>%
+  left_join(languages, by = 'original_language') %>%
+  ggplot(aes(forcats::fct_reorder(Language.name, -median_runtime), median_runtime))+
+          geom_col() +
+          geom_text(aes(label = median_runtime, vjust = -0.5)) +
+          xlab('Language') +
+          ylab('Median Minutes of Movie')+
+          ggtitle('Movie Language vs. Runtime')+
+          theme_minimal()
+```
+
+The first tidbit of insights I noticed was examining the relationship between the languages of the movies against the median run times. The number of movies for each language ranges from 51 (Polish) to 20,757 (English). The languages with the highest median movie run times all originate from the Indian Subcontinent. These languages are Malayalam, Tamil, and Hindi. English language movies are more around the middle with a median run time of about 81 minutes.
+
+Moving forward in the post, all charts are populated with filters on **English** movies and **Released Movies**.
+
+```{r horror movie count by decade, echo=FALSE}
+#Applying Decade Categories for the Release Year 
+horror_movies <- horror_movies %>%
+  filter(status == 'Released') %>%
+  mutate(decade_released = case_when(
+    year(release_date) >= 1950 & year(release_date) < 1960 ~ "1950-1959",
+    year(release_date) >= 1960 & year(release_date) < 1970 ~ "1960-1969",
+    year(release_date) >= 1970 & year(release_date) < 1980 ~ "1970-1979",
+    year(release_date) >= 1980 & year(release_date) < 1989 ~ "1980-1989",
+    year(release_date) >= 1990 & year(release_date) < 1999 ~ "1990-1999",
+    year(release_date) >= 2000 & year(release_date) < 2009 ~ "2000-2009",
+    year(release_date) >= 2010 & year(release_date) < 2019 ~ "2010-2019",
+    TRUE ~ "2020-pres"
+  ))
+
+#English Movies Only
+en_movies <- horror_movies %>%
+  filter (original_language == 'en')
+
+en_movies %>%
+  group_by(decade_released) %>%
+  count() %>%
+  ggplot(aes(decade_released, n))+
+  geom_col() +
+  geom_text(aes(label = n), nudge_y = 500) +
+  theme_minimal() +
+  labs(
+    title = "Count of English Horror Movies in each decade",
+    caption = "English Released Movies Only"
+  )+
+  xlab("Decade")+
+  ylab("Count")
+```
+
+Using Case When statements, I categorized the release years by decade. The above chart contains how many English Released Movies are in the Horror Movies Dataset by decade. The release of horror movies rapidly increased in the 21st Century, with 2010-2019 having more released movies than 1950-2009 **combined**. Furthermore, we're just 3 years into the current decade and 6,274 horror movies have been released. At this rate, the number of Horror Movies released this decade will be double than 2010-2019.
+
+```{r, echo=FALSE, message = FALSE, warning=FALSE}
+en_movies %>%
+  filter(!is.na(runtime) & !is.na(popularity)) %>%
+  ggplot(aes(runtime, popularity)) +
+  geom_point(alpha = 0.5, colour = 'darkred') +
+  geom_smooth() +
+  scale_y_continuous(trans = 'log10') +
+  coord_cartesian(xlim=c(40,150)) +
+  labs(
+    title = "Runtime vs Popularity of Movie",
+    caption = "English Movies Only"
+  )
+
+```
+
+One of the questions I had while poring through the data set was if there was a relationship between the run time of the movie and its popularity. I transformed popularity using a log10 base transformation and applied a smoothed line to the chart above. I noticed that movie popularity increased when a movie's run time was between 60 minutes and 105 minutes. However, movies with a movie run time over 115 minutes started to see their popularity stay stagnant.
+
+Many of the horror movies also have other genre tags along with the horror tag. In the table below, for example, the movie Nope has three other genres; Mystery, Science Fiction, and Thriller.
+
+```{r}
+en_movies %>%
+  select(title, genre_names) %>%
+  head()
+```
+
+I wrangled the English horror movie Data set using several case when statements to create dummy variables. In layman's terms, I separated genre_names into individual genre columns, each with a 1 if the genre is present and a 0 if it isn't.
+
+The heat map below shows a heat map of genre proportions by decade. Here's an example on how to read the heat map :
+
+*24% of Horror Movies released between 2020 and the present include "Thriller" as a genre*
+
+(I sure hope that makes it easier to read!).
+
+```{r plotly, echo=FALSE, message = FALSE, warning=FALSE, fig.width = 12}
+#Coding Dummy Variables for Each of the Movie Genres
+movie_genres <- en_movies %>%
+  mutate(
+    is_horror = case_when(
+      str_detect(genre_names, "Horror") ~ 1,
+      TRUE ~ 0
+    ),
+    is_adventure = case_when(
+      str_detect(genre_names, "Adventure") ~ 1,
+      TRUE ~0
+    ),
+    is_animation = case_when(
+      str_detect(genre_names, "Animation") ~ 1,
+      TRUE ~ 0
+    ),
+    is_crime = case_when(
+      str_detect(genre_names, "Crime") ~ 1,
+      TRUE ~ 0
+    ),
+    is_comedy = case_when(
+      str_detect(genre_names, "Comedy") ~ 1,
+      TRUE ~ 0,
+    ),
+    is_documentary = case_when(
+      str_detect(genre_names, "Documentary") ~ 1,
+      TRUE ~ 0,
+    ),
+    is_drama = case_when(
+      str_detect(genre_names, "Drama") ~ 1,
+      TRUE ~ 0
+    ),
+    is_family = case_when (
+      str_detect(genre_names, "Family") ~ 1,
+      TRUE ~ 0
+    ),
+    is_fantasy = case_when (
+      str_detect(genre_names, "Fantasy") ~ 1,
+      TRUE ~ 0
+    ),
+    is_music = case_when (
+      str_detect(genre_names, "Music") ~ 1,
+      TRUE ~ 0
+    ),
+    is_mystery = case_when (
+      str_detect(genre_names, "Mystery") ~ 1,
+      TRUE ~ 0
+    ),
+    is_romance = case_when (
+      str_detect(genre_names, "Romance") ~ 1,
+      TRUE ~ 0
+    ),
+    is_science_fiction = case_when (
+      str_detect(genre_names, "Science Fiction") ~ 1,
+      TRUE ~ 0
+    ),
+    is_thriller = case_when (
+      str_detect(genre_names, "Thriller") ~ 1,
+      TRUE ~ 0
+    ),
+    is_tv_movie = case_when (
+      str_detect(genre_names, "TV Movie") ~ 1,
+      TRUE ~ 0
+    ),
+    is_war = case_when (
+      str_detect(genre_names, "War") ~ 1,
+      TRUE ~ 0
+    ),
+    is_western = case_when (
+      str_detect(genre_names, "Western") ~ 1,
+      TRUE ~ 0
+    )
+  )
+
+#Compiling Counts for the Movie Sub genres and totaling their amounts.
+
+genre_counts_by_decade <- function(time_period) {
+genre_counts <- movie_genres %>%
+  filter(decade_released == time_period) %>%
+  summarize(
+    Adventure = sum(is_adventure) / n(),
+    Animation = sum(is_animation)/ n(),
+    Crime = sum(is_crime)/ n(),
+    Comedy = sum(is_comedy)/ n(),
+    Documentary = sum(is_documentary)/ n(),
+    Drama = sum(is_drama)/ n(),
+    Family = sum(is_family)/ n(),
+    Fantasy = sum(is_fantasy)/ n(),
+    Music = sum(is_music)/ n(),
+    Mystery = sum(is_mystery)/ n(),
+    Romance = sum(is_romance)/ n(),
+    Science_Fiction = sum(is_science_fiction)/ n(),
+    Thriller = sum(is_thriller)/ n(),
+    TV_Movie = sum(is_tv_movie)/ n(),
+    War = sum(is_war)/ n(),
+    Western = sum(is_western)/ n()
+  ) %>%
+  t()
+}
+genre_vector <- c("Adventure","Animation","Crime", "Comedy","Documentary","Drama","Family","Fantasy","Music","Mystery","Romance","Science Fiction", "Thriller", "TV Movie", "War", "Western")
+genre_counts <- data.frame(genre_vector,
+                           genre_counts_by_decade('1950-1959'),
+                           genre_counts_by_decade('1960-1969'),
+                           genre_counts_by_decade('1970-1979'),
+                           genre_counts_by_decade('1980-1989'),
+                           genre_counts_by_decade('1990-1999'),
+                           genre_counts_by_decade('2000-2009'),
+                           genre_counts_by_decade('2010-2019'),
+                           genre_counts_by_decade('2020-pres')) 
+rownames(genre_counts) <- NULL
+
+genre_counts <- as_tibble(genre_counts)
+genre_counts <- genre_counts %>%
+  rename(`genre name`="genre_vector",
+         `1950-1959` ="genre_counts_by_decade..1950.1959..",
+         `1960-1969` ="genre_counts_by_decade..1960.1969..",
+         `1970-1979` ="genre_counts_by_decade..1970.1979..",
+         `1980-1989` ="genre_counts_by_decade..1980.1989..",
+         `1990-1999` ="genre_counts_by_decade..1990.1999..",
+         `2000-2009` ="genre_counts_by_decade..2000.2009..",
+         `2010-2019` ="genre_counts_by_decade..2010.2019..",
+         `2020-pres` ="genre_counts_by_decade..2020.pres.."
+         ) %>%
+  arrange(desc(`2020-pres`))
+
+genre_counts_melt <- reshape2::melt(genre_counts) %>%
+  mutate(value = round(value, 2))
+
+p<-genre_counts_melt %>%
+  ggplot(aes(x = variable, y = fct_reorder(`genre name`, value) , fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "darkred", high = "white") +
+  geom_text(aes(label = scales::percent(value))) +
+  labs(
+    title = "Share of secondary Genres that appear alongside Horror By Decade",
+    caption = "How to Interpret: Horror Movies that Include a 'Thriller' tag make up 24% of movies released in 2020-pres."
+  )+
+  ylab("Genre")+
+  xlab("Decade")
+
+plotly::ggplotly(p)
+```
+
+With that, here are a few observations I noticed: 
+1. 53% of Horror Movies were also Science Fiction between 1950-1950. However, the share of Science Fiction Movies declined to only 7% today. 
+2. Horror and Thriller really go hand in hand. Horror-Thriller movies make up a sizable number in each decade. 
+3. Comedy Movies are on the rise! 17% of horror movies from 2020 to the present are Horror-Comedy movies and that share has been slowly increasing.
+
+The chart above is interactive, so feel free to play around and see if you can pull any insights as well!

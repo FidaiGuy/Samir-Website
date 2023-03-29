@@ -1,0 +1,4 @@
+"0","clean_Tweets %>%"
+"0","  select(retweet_count, full_text) %>%"
+"0","  arrange(desc(retweet_count)) %>%"
+"0","  head(n = 5)"

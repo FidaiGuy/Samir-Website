@@ -1,0 +1,129 @@
+Z---
+title: "Brush Up Project"
+output: html_document
+date: "2023-02-03"
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars, echo = False}
+
+horror_movies %>% glimpse()
+```
+
+
+
+```{r pressure, fig.width = 20}
+
+
+horror_movies_runtime %>%
+  left_join(languages, by = 'original_language') %>%
+  ggplot(aes(forcats::fct_reorder(Language.name, -median_runtime), median_runtime))+
+          geom_col() +
+          geom_text(aes(label = median_runtime, vjust = -0.5)) +
+          xlab('Language') +
+          ylab('Median Minutes of Movie')+
+          ggtitle('Movie Language vs. Runtime')+
+          theme_minimal()
+
+
+```
+
+
+```{r}
+en_movies %>%
+  group_by(decade_released) %>%
+  count() %>%
+  ggplot(aes(decade_released, n))+
+  geom_col() +
+  geom_text(aes(label = n), nudge_y = 500) +
+  theme_minimal() +
+  labs(
+    title = "Count of English Horror Movies in each decade",
+    caption = "English Released Movies Only"
+  )+
+  xlab("Decade")+
+  ylab("Count")
+```
+  Three years into 2020 and the number of horror movies released this decade is just under 2,000 less than the overall number of horror movies released in the last decade!
+
+
+
+
+
+
+
+
+```{r}
+horror_movies %>%
+  drop_na(revenue, collection_name) %>%
+  filter(revenue > 0) %>%
+  select(revenue, collection_name)%>%
+  group_by(collection_name) %>%
+  mutate(`total revenue`=sum(revenue)) %>%
+  arrange(desc(`total revenue`)) %>%
+  distinct(collection_name, `total revenue`)
+
+```
+
+```{r}
+en_movies %>%
+  drop_na(revenue, original_title) %>%
+  filter(revenue > 0) %>%
+  select(revenue, original_title)%>%
+  group_by(original_title) %>%
+  mutate(`total revenue`=sum(revenue)) %>%
+  arrange(desc(`total revenue`)) %>%
+  distinct(original_title, `total revenue`)
+```
+
+
+
+
+
+```{r}
+#Plot Code for Run time vs Popularity
+en_movies %>%
+  filter(!is.na(runtime) & !is.na(popularity)) %>%
+  ggplot(aes(runtime, popularity)) +
+  geom_point(aes(alpha = 0.1), colour = 'darkred') +
+  geom_smooth() +
+  scale_y_continuous(trans = 'log10') +
+  coord_cartesian(xlim=c(40,150)) +
+  labs(
+    title = "Runtime vs Popularity of Movie",
+    caption = "English Movies Only"
+  )
+
+#Insight: Movies between 60-100 mins recorded the highest increase in popularity, however movies after a run time of 100 minutes start to flatten and decrease in popularity.
+
+```
+
+
+
+music, romance, western
+```{r, , fig.width = 12}
+p<-genre_counts_melt %>%
+  ggplot(aes(x = variable, y = fct_reorder(`genre name`, value) , fill = value)) +
+  geom_tile() +
+  scale_fill_gradient(low = "darkred", high = "white") +
+  geom_text(aes(label = scales::percent(value))) +
+  labs(
+    title = "Share of secondary Genres that appear alongside Horror By Decade",
+    caption = "How to Interpret: Horror Movies that Include a 'Thriller' tag make up 24% of movies released in 2020-pres."
+  )+
+  ylab("Genre")+
+  xlab("Decade")
+
+plotly::ggplotly(p)
+
+```
+

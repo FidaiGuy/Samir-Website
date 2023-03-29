@@ -1,3 +1,4 @@
+"0","clean_Tweets %>%"
 "0","  mutate(`tweet source` = str_extract(source, ""Twitter [A-Za-z ]*"")) %>%"
 "0","  filter(!is.na(`tweet source`))  %>%"
 "0","  ggplot() +"

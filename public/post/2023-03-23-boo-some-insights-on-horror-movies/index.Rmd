@@ -1,0 +1,104 @@
+---
+title: Boo! Some insights on Horror Movies
+author: 'Samir Fidai'
+date: '2023-03-23'
+slug: []
+categories: []
+tags: []
+---
+
+
+```{r, include = FALSE}
+library(tidyverse)
+
+horror_movies <- read_csv("C:/Users/samir/Documents/GitHub/Horror-Movie-Data-Wrangling-Visualization/horror_movies.csv")
+languages <- read.csv("C:/Users/samir/Documents/GitHub/Horror-Movie-Data-Wrangling-Visualization/list_of_iso_codes-934j.csv")
+languages <- languages %>%
+  select(Language.name, X639.1) %>%
+  rename(original_language = X639.1)
+```
+
+Alongside applying for jobs and also taking courses on Python and SQL, I've been practicing some Data Wrangling and Data Visualization Skills using dplyr and ggplot2. The Data set I've used was Downloaded as a .csv File from [Kaggle](https://www.kaggle.com/datasets/evangower/horror-movies). The dataset contains 21 different variables, however not all 21 were used. The Horror Movies Dataset contains 21 columns and contains about 32,540 movies. However, after filtering for only English movies and already released movies, about 21,000 movies remain. The file I used to wrangle the data is available on my [GitHub](https://www.github.com/FidaiGuy).
+
+
+```{r language vs minutes, fig.width = 20, echo=FALSE}
+#Wrangling for Average Run Time vs Popularity
+horror_movies_runtime <- horror_movies %>%
+  mutate(original_language = str_replace_all(original_language, 'cn', 'zh')) %>%
+  filter(runtime != is.na(runtime)) %>%
+  select(original_language, runtime) %>%
+  group_by(original_language)%>% 
+  summarise(median_runtime = median(runtime),
+            mean_runtime = mean(runtime),
+            number_movies = n()) %>%
+  arrange(desc(number_movies)) %>%
+  head(n=25)
+
+
+horror_movies_runtime %>%
+  left_join(languages, by = 'original_language') %>%
+  ggplot(aes(forcats::fct_reorder(Language.name, -median_runtime), median_runtime))+
+          geom_col() +
+          geom_text(aes(label = median_runtime, vjust = -0.5)) +
+          xlab('Language') +
+          ylab('Median Minutes of Movie')+
+          ggtitle('Movie Language vs. Runtime')+
+          theme_minimal()
+```
+
+The first tidbit of insights I noticed was examining the relationship between the languages of the movies against the median run times. The number of movies for each language ranges from 51 (Polish) to 20,757 (English). The languages with the highest median movie run times all originate from the Indian Subcontinent. These languages are Malayalam, Tamil, and Hindi. English language movies are more around the middle with a median run time of about 81 minutes. 
+
+Moving forward in the post, all charts are populated with filters on **English** movies and **Released Movies**.
+
+```{r horror movie count by decade, echo=FALSE}
+#Applying Decade Categories for the Release Year 
+horror_movies <- horror_movies %>%
+  filter(status == 'Released') %>%
+  mutate(decade_released = case_when(
+    year(release_date) >= 1950 & year(release_date) < 1960 ~ "1950-1959",
+    year(release_date) >= 1960 & year(release_date) < 1970 ~ "1960-1969",
+    year(release_date) >= 1970 & year(release_date) < 1980 ~ "1970-1979",
+    year(release_date) >= 1980 & year(release_date) < 1989 ~ "1980-1989",
+    year(release_date) >= 1990 & year(release_date) < 1999 ~ "1990-1999",
+    year(release_date) >= 2000 & year(release_date) < 2009 ~ "2000-2009",
+    year(release_date) >= 2010 & year(release_date) < 2019 ~ "2010-2019",
+    TRUE ~ "2020-pres"
+  ))
+
+#English Movies Only
+en_movies <- horror_movies %>%
+  filter (original_language == 'en')
+
+en_movies %>%
+  group_by(decade_released) %>%
+  count() %>%
+  ggplot(aes(decade_released, n))+
+  geom_col() +
+  geom_text(aes(label = n), nudge_y = 500) +
+  theme_minimal() +
+  labs(
+    title = "Count of English Horror Movies in each decade",
+    caption = "English Released Movies Only"
+  )+
+  xlab("Decade")+
+  ylab("Count")
+```
+
+Using Case When statements, I created 
+
+
+```{r, echo=FALSE, message = FALSE, warning=FALSE}
+en_movies %>%
+  filter(!is.na(runtime) & !is.na(popularity)) %>%
+  ggplot(aes(runtime, popularity)) +
+  geom_point(alpha = 0.5, colour = 'darkred') +
+  geom_smooth() +
+  scale_y_continuous(trans = 'log10') +
+  coord_cartesian(xlim=c(40,150)) +
+  labs(
+    title = "Runtime vs Popularity of Movie",
+    caption = "English Movies Only"
+  )
+
+```
+

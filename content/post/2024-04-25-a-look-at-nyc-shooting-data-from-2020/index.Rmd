@@ -7,7 +7,7 @@ categories: []
 tags: []
 ---
 
-For my first blog post in well over a year, I chose to take a further look at the NYPD's publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8/about_data). As always, all the code that I have written to create the visualizations below will be available to view on my [Github](placeholder add link to repo here).
+For my first blog post in well over a year, I chose to take a further look at the NYPD's publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8/about_data). As always, all the code that I have written to create the visualizations below will be available to view on my [Github](https://github.com/FidaiGuy/NYC-mini-blog).
 
 
 

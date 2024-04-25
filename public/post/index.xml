@@ -6,7 +6,17 @@
     <description>Recent content in Posts on Samir&#39;s Website</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 23 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://samirfidai.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 25 Apr 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://samirfidai.com/post/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>A look at NYC Shooting Data from 2020</title>
+      <link>https://samirfidai.com/post/2024-04-25-a-look-at-nyc-shooting-data-from-2020/</link>
+      <pubDate>Thu, 25 Apr 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://samirfidai.com/post/2024-04-25-a-look-at-nyc-shooting-data-from-2020/</guid>
+      <description>For my first blog post in well over a year, I chose to take a further look at the NYPD’s publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found here. As always, all the code that I have written to create the visualizations below will be available to view on my Github.
+The visualization below is a trended look at the number of Shootings by year.</description>
+    </item>
+    
     <item>
       <title>Boo! Some insights on Horror Movies</title>
       <link>https://samirfidai.com/post/2023-03-23-boo-some-insights-on-horror-movies/</link>

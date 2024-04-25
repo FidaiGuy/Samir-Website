@@ -1,0 +1,129 @@
+---
+title: "A look at NYC Shooting Data from 2020"
+author: "Samir Fidai"
+date: "2024-04-25"
+slug: []
+categories: []
+tags: []
+---
+
+For my first blog post in well over a year, I chose to take a further look at the NYPD's publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8/about_data). As always, all the code that I have written to create the visualizations below will be available to view on my [Github](placeholder add link to repo here).
+
+
+
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(plotly)
+library(leaflet)
+library(ggpubr)
+library(mapview)
+
+theme_set(theme_minimal())
+```
+
+```{r, include=FALSE}
+NYPD_shooting_data <- read_csv("C:/Users/samirfidai/Downloads/NYPD_Shooting_Incident_Data__Historic__20240422.csv")
+NYPD_shooting_data %>% glimpse()
+```
+
+```{r, include=FALSE}
+NYPD_shooting_data <- NYPD_shooting_data %>%
+  mutate(
+    OCCUR_DATE = mdy(OCCUR_DATE),
+    OCCUR_YEAR = year(OCCUR_DATE)
+  )
+```
+
+
+
+
+The visualization below is a trended look at the number of Shootings by year. I've broken it out by borough as well as the race of the shooting victim. We can see a majority of recorded shooting incidents occur in The Bronx and Brooklyn with African Americans being the primary victim. What really stood out to me was the massive spike between 2019-2020. I decided to focus the rest of this blog in doing further investigations on *when* these shootings were occurring and *where* in the boroughs were shooting incidents concentrated. 
+
+```{r, fig.width=14, fig.height = 8, echo=FALSE, warning=FALSE,results="hide"}
+
+murders_by_borough <- NYPD_shooting_data %>%
+  mutate(occur_year = year(OCCUR_DATE)) %>%
+  group_by(BORO, occur_year) %>%
+  summarize(murders = n()) %>%
+  ggplot(aes(occur_year, murders)) +
+    geom_line(aes(color = BORO)) +
+    scale_x_continuous(breaks = seq(2006, 2024, 1)) +
+    ggtitle('Shooting Incidents by Borough')+
+    theme(legend.position = "top")
+
+murders_by_race <- NYPD_shooting_data %>%
+  mutate(occur_year = year(OCCUR_DATE)) %>%
+  group_by(VIC_RACE, occur_year) %>%
+  summarize(murders = n()) %>%
+  ggplot(aes(occur_year, murders)) +
+    geom_line(aes(color = VIC_RACE)) +
+    scale_x_continuous(breaks = seq(2006, 2024, 1)) +
+    ggtitle('Shooting Incidents by Race') +
+    theme(legend.position = "top")
+
+ggpubr::ggarrange(murders_by_borough, murders_by_race, ncol = 1, widths = c(9,1))
+```
+
+<br>
+<br>
+<br>
+
+To visualize the time when shootings were occurring in NYC by borough, I created a heatmap in ggplot. In most boroughs, shootings occur primarily in the evening/night and rarely during the day. This pattern can be seen in Brooklyn where there were 355 reported shootings in 2020 that occurred between 9pm and 1am. 
+
+```{r, fig.width=10, echo=FALSE}
+ggplotly(
+NYPD_shooting_data %>%
+  mutate(OCCUR_HOUR = hour(OCCUR_TIME),) %>%
+  dplyr::filter(OCCUR_YEAR >= 2020 & OCCUR_YEAR < 2021) %>%
+  group_by(BORO, OCCUR_HOUR) %>%
+  summarize(n = n()) %>%
+  ggplot(aes(x = OCCUR_HOUR, y = BORO, fill = n))+
+    geom_tile() +
+    scale_fill_gradient(low = "lightblue", high = "darkblue", na.value = NA) +
+    labs(title = "Time of Shooting Incident in NYC in 2020 by Borough"))
+```
+
+
+
+<br>
+<br>
+<br>
+
+Finally, I mapped the location of each shooting in NYC in 2020. Using the included geographical coordinates provided in the Data, I used the Leaflet Package in R to create a map of shooting incidents. The NYPD flags shootings if they were counted as a murder. When you click a shooting incident, a user would be able to view the incident date and demographics on the victim.
+
+**Location of NYC Shooting Incidents in 2020**
+```{r, fig.width=10, echo=FALSE}
+NYPD_shooting_data_2021 <- NYPD_shooting_data %>%
+  dplyr::filter(OCCUR_YEAR >= 2020 & OCCUR_YEAR < 2021) 
+
+popup_view = paste0(
+  "<b> Incident Date: </b>",
+  NYPD_shooting_data_2021$OCCUR_DATE,
+  "<br>",
+  "<b>Victim's Age: </b>",
+  NYPD_shooting_data_2021$VIC_AGE_GROUP,
+  "<br>",
+  "<b>Victim's Sex: </b>",
+  NYPD_shooting_data_2021$VIC_SEX,
+  "<br>",
+  "<b>Victim's Race: </b>",
+  NYPD_shooting_data_2021$VIC_RACE
+)
+
+
+NYPD_shooting_data_2021 %>% leaflet() %>%
+  addTiles() %>%
+  addCircleMarkers(~NYPD_shooting_data_2021$Longitude, 
+                   ~NYPD_shooting_data_2021$Latitude,
+                    clusterOptions = markerClusterOptions(),
+                   color = ~ifelse(STATISTICAL_MURDER_FLAG == TRUE, "red", "blue"),
+                   popup = ~popup_view) %>%
+  setView(-74.00, 40.71, zoom = 11) %>%
+  addLegend("bottomleft",
+            colors = c("red", "blue"),
+            labels = c("Yes", "No"),
+            title = "Shooting counted as a murder")
+```
+
+

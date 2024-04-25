@@ -1,7 +1,0 @@
-"0","raw_Tweets <- read_file(file = here::here(""tweets.js""))"
-"0",""
-"0","json <- sub(""window.YTD.tweets.part0 = "", """", raw_Tweets)"
-"0",""
-"0","raw_Tweets <- fromJSON(json)"
-"0",""
-"0","raw_Tweets <- raw_Tweets$tweet"

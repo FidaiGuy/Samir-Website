@@ -1,0 +1,5 @@
+"0","NYPD_shooting_data <- NYPD_shooting_data %>%"
+"0","  mutate("
+"0","    OCCUR_DATE = mdy(OCCUR_DATE),"
+"0","    OCCUR_YEAR = year(OCCUR_DATE)"
+"0","  )"

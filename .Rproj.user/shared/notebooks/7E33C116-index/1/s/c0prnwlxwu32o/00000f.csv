@@ -1,0 +1,44 @@
+"0","NYPD_shooting_data <- read_csv(""C:/Users/samirfidai/Downloads/NYPD_Shooting_Incident_Data__Historic__20240422.csv"")"
+"2","[1mRows: [22m[34m27544[39m [1mColumns: [22m[34m21[39m"
+"2","[36m──[39m [1mColumn specification[22m [36m────────────────────────────────────────────────────────────────────────────────────────────[39m
+[1mDelimiter:[22m "",""
+[31mchr[39m  (12): OCCUR_DATE, BORO, LOC_OF_OCCUR_DESC, LOC_CLASSFCTN_DESC, LOCATION_DESC, PERP_AGE_GROUP, PERP_SEX, PER...
+[32mdbl[39m   (7): INCIDENT_KEY, PRECINCT, JURISDICTION_CODE, X_COORD_CD, Y_COORD_CD, Latitude, Longitude
+[33mlgl[39m   (1): STATISTICAL_MURDER_FLAG
+[34mtime[39m  (1): OCCUR_TIME"
+"2","
+[36mℹ[39m Use `spec()` to retrieve the full column specification for this data.
+[36mℹ[39m Specify the column types or set `show_col_types = FALSE` to quiet this message."
+"0","NYPD_shooting_data %>% glimpse()"
+"1","Rows: 27,544"
+"1",""
+"1","
+"
+"1","Columns: 21"
+"1",""
+"1","
+"
+"1","$ INCIDENT_KEY            [3m[38;5;246m<dbl>[39m[23m 283390056, 283404608, 281250471, 283951187, 279799858, 282041195, 283815379, 28211…
+$ OCCUR_DATE              [3m[38;5;246m<chr>[39m[23m ""03/07/2024"", ""03/07/2024"", ""01/27/2024"", ""03/18/2024"", ""01/01/2024"", ""02/10/2024""…
+$ OCCUR_TIME              [3m[38;5;246m<time>[39m[23m 17:15:00, 16:14:00, 18:36:00, 22:00:00, 14:57:00, 18:55:00, 03:00:00, 16:32:00, 2…
+$ BORO                    [3m[38;5;246m<chr>[39m[23m ""BROOKLYN"", ""BRONX"", ""BROOKLYN"", ""QUEENS"", ""BRONX"", ""BROOKLYN"", ""MANHATTAN"", ""BRON…
+$ LOC_OF_OCCUR_DESC       [3m[38;5;246m<chr>[39m[23m ""OUTSIDE"", ""OUTSIDE"", ""OUTSIDE"", ""OUTSIDE"", ""OUTSIDE"", ""OUTSIDE"", ""OUTSIDE"", ""INSI…
+$ PRECINCT                [3m[38;5;246m<dbl>[39m[23m 73, 40, 75, 103, 52, 61, 25, 44, 47, 32, 69, 47, 40, 105, 41, 114, 44, 67, 73, 107…
+$ JURISDICTION_CODE       [3m[38;5;246m<dbl>[39m[23m 0, 0, 0, 0, 0, 0, 0, 1, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 2, 0, 2, 0, 0, 0, 0, 0, 0…
+$ LOC_CLASSFCTN_DESC      [3m[38;5;246m<chr>[39m[23m ""STREET"", ""STREET"", ""STREET"", ""DWELLING"", ""STREET"", ""STREET"", ""STREET"", ""TRANSIT"",…
+$ LOCATION_DESC           [3m[38;5;246m<chr>[39m[23m ""(null)"", ""(null)"", ""(null)"", ""PVT HOUSE"", ""(null)"", ""(null)"", ""(null)"", ""(null)"",…
+$ STATISTICAL_MURDER_FLAG [3m[38;5;246m<lgl>[39m[23m FALSE, TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, TRUE, FAL…
+$ PERP_AGE_GROUP          [3m[38;5;246m<chr>[39m[23m ""18-24"", ""<18"", ""(null)"", ""(null)"", ""25-44"", ""45-64"", ""25-44"", ""<18"", ""(null)"", ""1…
+$ PERP_SEX                [3m[38;5;246m<chr>[39m[23m ""M"", ""M"", ""(null)"", ""(null)"", ""M"", ""M"", ""M"", ""M"", ""(null)"", ""M"", ""M"", ""(null)"", ""(…
+$ PERP_RACE               [3m[38;5;246m<chr>[39m[23m ""BLACK"", ""BLACK"", ""(null)"", ""(null)"", ""BLACK HISPANIC"", ""BLACK"", ""BLACK"", ""BLACK H…
+$ VIC_AGE_GROUP           [3m[38;5;246m<chr>[39m[23m ""18-24"", ""<18"", ""25-44"", ""25-44"", ""18-24"", ""25-44"", ""25-44"", ""65+"", ""25-44"", ""25-4…
+$ VIC_SEX                 [3m[38;5;246m<chr>[39m[23m ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M"", ""M…
+$ VIC_RACE                [3m[38;5;246m<chr>[39m[23m ""BLACK"", ""BLACK"", ""BLACK"", ""BLACK"", ""WHITE HISPANIC"", ""BLACK"", ""BLACK"", ""WHITE HIS…
+$ X_COORD_CD              [3m[38;5;246m<dbl>[39m[23m 1008245, 1005028, 1015391, 1042419, 1014086, 989992, 1001643, 1007839, 1026242, 10…
+$ Y_COORD_CD              [3m[38;5;246m<dbl>[39m[23m 183796, 234516, 181282, 193657, 254305, 155381, 232461, 246906, 262090, 241659, 17…
+$ Latitude                [3m[38;5;246m<dbl>[39m[23m NA, NA, 40.66420, 40.69803, 40.86463, 40.59316, 40.80471, 40.84434, 40.88595, 40.8…
+$ Longitude               [3m[38;5;246m<dbl>[39m[23m NA, NA, -73.88775, -73.79022, -73.89213, -73.97932, -73.93717, -73.91474, -73.8481…
+$ Lon_Lat                 [3m[38;5;246m<chr>[39m[23m NA, NA, ""POINT (-73.88775 40.6642)"", ""POINT (-73.790219 40.698032)"", ""POINT (-73.8…"
+"1",""
+"1","
+"

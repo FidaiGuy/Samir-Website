@@ -1,8 +1,0 @@
-"0","en_movies %>%"
-"0","  drop_na(revenue, original_title) %>%"
-"0","  filter(revenue > 0) %>%"
-"0","  select(revenue, original_title)%>%"
-"0","  group_by(original_title) %>%"
-"0","  mutate(`total revenue`=sum(revenue)) %>%"
-"0","  arrange(desc(`total revenue`)) %>%"
-"0","  distinct(original_title, `total revenue`)"

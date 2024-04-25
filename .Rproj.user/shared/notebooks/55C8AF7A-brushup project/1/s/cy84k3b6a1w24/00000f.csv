@@ -1,7 +1,0 @@
-"0","  drop_na(revenue, collection_name) %>%"
-"0","  filter(revenue > 0) %>%"
-"0","  select(revenue, collection_name)%>%"
-"0","  group_by(collection_name) %>%"
-"0","  mutate(`total revenue`=sum(revenue)) %>%"
-"0","  arrange(desc(`total revenue`)) %>%"
-"0","  distinct(collection_name, `total revenue`)"

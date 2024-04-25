@@ -1,2 +1,0 @@
-"0","  select(title, genre_names) %>%"
-"0","  head()"

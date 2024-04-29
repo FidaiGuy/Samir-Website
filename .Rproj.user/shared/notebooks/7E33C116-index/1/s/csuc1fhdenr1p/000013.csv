@@ -7,5 +7,6 @@
 "0","  ggplot(aes(x = OCCUR_HOUR, y = BORO, fill = n))+"
 "0","    geom_tile() +"
 "0","    scale_fill_gradient(low = ""lightblue"", high = ""darkblue"", na.value = NA) +"
-"0","    labs(title = ""Time of Shooting Incident in NYC in 2020 by Borough""))"
+"0","    labs(title = ""Time of Shooting Incident in NYC in 2020 by Borough"","
+"0","         x = ""Hour Shooting Occured""))"
 "2","`summarise()` has grouped output by 'BORO'. You can override using the `.groups` argument."

@@ -13,21 +13,25 @@ For my first blog post in well over a year, I chose to take a further look at th
 
 
 ```{r setup, include=FALSE}
+#Package Imports
 library(tidyverse)
 library(plotly)
 library(leaflet)
 library(ggpubr)
 library(mapview)
 
+#Setting ggPlot themes to Minimal.
 theme_set(theme_minimal())
 ```
 
 ```{r, include=FALSE}
+#Import NYPD Data into Workspace and a look at the column data types. 
 NYPD_shooting_data <- read_csv("C:/Users/samirfidai/Downloads/NYPD_Shooting_Incident_Data__Historic__20240422.csv")
 NYPD_shooting_data %>% glimpse()
 ```
 
 ```{r, include=FALSE}
+#Converting the Data Occured column to a date and making an additional column for the year occured
 NYPD_shooting_data <- NYPD_shooting_data %>%
   mutate(
     OCCUR_DATE = mdy(OCCUR_DATE),
@@ -42,6 +46,7 @@ The visualization below is a trended look at the number of Shootings by year. I'
 
 ```{r, fig.width=14, fig.height = 8, echo=FALSE, warning=FALSE,results="hide"}
 
+#Trended visuals of shooting incidents by year and broken out first by borough then race. 
 murders_by_borough <- NYPD_shooting_data %>%
   mutate(occur_year = year(OCCUR_DATE)) %>%
   group_by(BORO, occur_year) %>%
@@ -49,7 +54,10 @@ murders_by_borough <- NYPD_shooting_data %>%
   ggplot(aes(occur_year, murders)) +
     geom_line(aes(color = BORO)) +
     scale_x_continuous(breaks = seq(2006, 2024, 1)) +
-    ggtitle('Shooting Incidents by Borough')+
+    labs(
+      title = "Shooting Incidents By Borough",
+      subtitle = "Note: 2024 is through March 2024.",
+      x="year")+
     theme(legend.position = "top")
 
 murders_by_race <- NYPD_shooting_data %>%
@@ -59,9 +67,14 @@ murders_by_race <- NYPD_shooting_data %>%
   ggplot(aes(occur_year, murders)) +
     geom_line(aes(color = VIC_RACE)) +
     scale_x_continuous(breaks = seq(2006, 2024, 1)) +
-    ggtitle('Shooting Incidents by Race') +
+    labs(
+      title = "Shooting Incidents By Race",
+      subtitle = "Note: 2024 is through March 2024",
+      x = "year"
+    ) +
     theme(legend.position = "top")
 
+#Combining the plots above into 1 image. 
 ggpubr::ggarrange(murders_by_borough, murders_by_race, ncol = 1, widths = c(9,1))
 ```
 
@@ -72,6 +85,7 @@ ggpubr::ggarrange(murders_by_borough, murders_by_race, ncol = 1, widths = c(9,1)
 To visualize the time when shootings were occurring in NYC by borough, I created a heatmap in ggplot. In most boroughs, shootings occur primarily in the evening/night and rarely during the day. This pattern can be seen in Brooklyn where there were 355 reported shootings in 2020 that occurred between 9pm and 1am. 
 
 ```{r, fig.width=10, echo=FALSE}
+#Creating the heat map for the hour shooting occurred by Borough in 2020. 
 ggplotly(
 NYPD_shooting_data %>%
   mutate(OCCUR_HOUR = hour(OCCUR_TIME),) %>%
@@ -81,7 +95,8 @@ NYPD_shooting_data %>%
   ggplot(aes(x = OCCUR_HOUR, y = BORO, fill = n))+
     geom_tile() +
     scale_fill_gradient(low = "lightblue", high = "darkblue", na.value = NA) +
-    labs(title = "Time of Shooting Incident in NYC in 2020 by Borough"))
+    labs(title = "Time of Shooting Incident in NYC in 2020 by Borough",
+         x = "Hour Shooting Occured"))
 ```
 
 

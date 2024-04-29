@@ -7,7 +7,7 @@ categories: []
 tags: []
 ---
 
-For my first blog post in well over a year, I chose to take a further look at the NYPD's publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8/about_data). As always, all the code that I have written to create the visualizations below will be available to view on my [Github](placeholder add link to repo here).
+For my first blog post in well over a year, I chose to take a further look at the NYPD's publicly available Shooting Incident Data. The link to the public dataset used for this blog post can be found [here](https://data.cityofnewyork.us/Public-Safety/NYPD-Shooting-Incident-Data-Historic-/833y-fsy8/about_data). As always, all the code that I have written to create the visualizations below will be available to view on my [Github](https://github.com/FidaiGuy/NYC-mini-blog).
 
 
 
@@ -49,7 +49,10 @@ murders_by_borough <- NYPD_shooting_data %>%
   ggplot(aes(occur_year, murders)) +
     geom_line(aes(color = BORO)) +
     scale_x_continuous(breaks = seq(2006, 2024, 1)) +
-    ggtitle('Shooting Incidents by Borough')+
+    labs(
+      title = "Shooting Incidents By Borough",
+      subtitle = "Note: 2024 data is through March 2024.",
+      x="year")+
     theme(legend.position = "top")
 
 murders_by_race <- NYPD_shooting_data %>%
@@ -59,7 +62,11 @@ murders_by_race <- NYPD_shooting_data %>%
   ggplot(aes(occur_year, murders)) +
     geom_line(aes(color = VIC_RACE)) +
     scale_x_continuous(breaks = seq(2006, 2024, 1)) +
-    ggtitle('Shooting Incidents by Race') +
+    labs(
+      title = "Shooting Incidents By Race",
+      subtitle = "Note: 2024 data is through Q1 March",
+      x = "year"
+    ) +
     theme(legend.position = "top")
 
 ggpubr::ggarrange(murders_by_borough, murders_by_race, ncol = 1, widths = c(9,1))

@@ -3,7 +3,7 @@
     "path": "~/GitHub/Samir-Website/config.yaml",
     "project_path": "config.yaml",
     "type": "yaml",
-    "hash": "3153657096",
+    "hash": "3800625",
     "contents": "",
     "dirty": false,
     "created": 1714063627891.0,
@@ -12,15 +12,15 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "27,27",
-        "scrollLine": "3"
+        "cursorPosition": "7,13",
+        "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1714063640,
+    "lastKnownWriteTime": 1714405397,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1714063640374,
+    "last_content_update": 1714405397325,
     "read_only": false,
     "read_only_alternatives": []
 }
